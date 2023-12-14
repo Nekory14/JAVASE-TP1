@@ -6,14 +6,15 @@ public abstract class Account {
 	
 	protected String label;
 	protected Double balance;
+	protected static int nextAccountNumber = 1;
 	protected int accountNumber;
 	protected Clients client;
 	
-	public Account(String label, Clients client, int accountNumber) {
+	public Account(String label, Clients client) {
 		
 		this.label = label;
 		this.client = client;
-		this.accountNumber = ++accountNumber;
+		this.accountNumber = nextAccountNumber++;
 		
 	}
 
