@@ -6,7 +6,7 @@ public class Clients {
 	
 	private String name;
 	private String firstName;
-	private int clientNumber;
+	private static int clientNumber = 0;
 	
 	public Clients(String name, String firstName) {
 	
@@ -34,10 +34,6 @@ public class Clients {
 
 	public int getClientNumber() {
 		return clientNumber;
-	}
-
-	public void setClientNumber(int clientNumber) {
-		this.clientNumber = clientNumber;
 	}
 	
 	@Override
