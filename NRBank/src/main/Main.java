@@ -3,6 +3,9 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Hashtable;
+import java.util.Map;
 
 import components.Account;
 import components.Clients;
@@ -20,6 +23,10 @@ public class Main {
 		displayClients(clientsList);
 		
 		ArrayList<Account> accountsList = loadAccounts(clientsList);
+		
+		Hashtable<Integer, Account> accountHashtable = createAccountHashtable(accountsList);
+		
+		displayAccountHashtable(accountHashtable);
 		
 	}
 	
@@ -62,6 +69,24 @@ public class Main {
                 .map(Account::toString)
                 .forEach(System.out::println);
     }
+	
+	//1.3.1 Adaptation of the table of accounts
+	
+	public static Hashtable<Integer, Account> createAccountHashtable(ArrayList<Account> accountsList){
+		Hashtable<Integer, Account> accountHashtable = new Hashtable<>();
+		
+		for (Account account : accountsList) {
+			accountHashtable.put(account.getAccountNumber(), account);
+		}
+		
+		return accountHashtable;
+	}
+	
+	public static void displayAccountHashtable(Hashtable<Integer, Account> accountHashtable) {
+		accountHashtable.entrySet().stream()
+				.sorted(Map.Entry.comparingByValue(Comparator.comparing(Account::getBalance)))
+				.forEach(entry -> System.out.println(entry.getKey() + ": " + entry.getValue()));
+	}
 	
 	
 }
