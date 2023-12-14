@@ -6,13 +6,13 @@ public class Clients {
 	
 	private String name;
 	private String firstName;
-	private static int clientNumber = 0;
+	private int clientNumber;
 	
-	public Clients(String name, String firstName) {
+	public Clients(String name, String firstName, int clientNumber) {
 	
 		this.name = name;
-		this.firstName = name;
-		clientNumber++;
+		this.firstName = firstName;
+		this.clientNumber = ++clientNumber;
 		
 	}
 
