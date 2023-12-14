@@ -4,8 +4,8 @@ package components;
 
 public class SavingsAccount extends Account {
 
-	public SavingsAccount(String label, Clients client, int accountNumber) {
-		super(label, client, accountNumber);
+	public SavingsAccount(Clients client) {
+		super("Savings Account", client);
 	}
 
 }

@@ -4,8 +4,8 @@ package components;
 
 public class CurrentAccount extends Account {
 
-	public CurrentAccount(String label, Clients client, int accountNumber) {
-		super(label, client, accountNumber);
+	public CurrentAccount(Clients client) {
+		super("Current Account", client);
 	}
 
 }
