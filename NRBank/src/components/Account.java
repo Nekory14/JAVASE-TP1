@@ -30,8 +30,15 @@ public abstract class Account {
 		return balance;
 	}
 
-	public void setBalance(Double balance) {
-		this.balance = balance;
+	public void setBalance(Flow flow) {
+		double amount = flow.getAmount();
+		boolean isEffect = flow.isEffect();
+		
+		if(isEffect) {
+			this.balance += amount;
+		} else {
+			this.balance -= amount;
+		}
 	}
 
 	public int getAccountNumber() {
