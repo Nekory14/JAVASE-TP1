@@ -30,15 +30,27 @@ public abstract class Account {
 	public Double getBalance() {
 		return balance;
 	}
+	
+	//1.3.5 Updating accounts
 
 	public void setBalance(Flow flow) {
 		double amount = flow.getAmount();
 		boolean isEffect = flow.isEffect();
 		
-		if(isEffect) {
+		if(flow instanceof Credit) {
 			this.balance += amount;
-		} else {
+		} else if (flow instanceof Debit){
 			this.balance -= amount;
+		} else if(flow instanceof Transfer) {
+			Transfer transfer = (Transfer) flow;
+			int targetAccountNumber = transfer.getTargetAccountNumber();
+			int issuingAccountNumber = transfer.getAccountNumber();
+			
+			if (this.accountNumber == targetAccountNumber) {
+				this.balance += amount;
+			} else if (this.accountNumber == issuingAccountNumber) {
+				this.balance -= amount;
+			}
 		}
 	}
 

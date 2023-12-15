@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Optional;
 
 import components.Account;
 import components.Clients;
@@ -31,13 +32,16 @@ public class Main {
 		ArrayList<Account> accountsList = loadAccounts(clientsList);
 		
 		Hashtable<Integer, Account> accountHashtable = createAccountHashtable(accountsList);
-		
-		displayAccountHashtable(accountHashtable);
-		
+				
 		ArrayList<Flow> flowsList = loadFlows(accountsList);
 		
 		displayFlows(flowsList);
 		
+		updateBalances(flowsList, accountHashtable);
+		
+		displayAccountHashtable(accountHashtable);
+
+			
 	}
 	
 	
@@ -95,7 +99,7 @@ public class Main {
 	public static void displayAccountHashtable(Hashtable<Integer, Account> accountHashtable) {
 		accountHashtable.entrySet().stream()
 				.sorted(Map.Entry.comparingByValue(Comparator.comparing(Account::getBalance)))
-				.forEach(entry -> System.out.println(entry.getKey() + ": " + entry.getValue()));
+				.forEach(entry -> System.out.println(entry.getValue()));
 	}
 	
 	//1.3.4 Creation of the flow array
@@ -108,15 +112,15 @@ public class Main {
 		
 		for (Account account : accountsList) {
 			if (account instanceof CurrentAccount) {
-				Credit credit1 = new Credit("Credit of 100.50€", 100.50, account.getAccountNumber(), true, currentDatePlusTwoDays());
+				Credit credit1 = new Credit("Credit of 100.50€", 100.50, account.getAccountNumber(), true, new Date());
 				flowsList.add(credit1);
 			} else if (account instanceof SavingsAccount) {
-				Credit credit2 = new Credit("Credit of 1500€", 1500.0, account.getAccountNumber(), true, currentDatePlusTwoDays());
+				Credit credit2 = new Credit("Credit of 1500€", 1500.0, account.getAccountNumber(), true, new Date());
 				flowsList.add(credit2);
 			}
 		}
 		
-		Transfer transfer1 = new Transfer("Transfer of 50€", 50.0, 1, 2, true, currentDatePlusTwoDays());
+		Transfer transfer1 = new Transfer("Transfer of 50€", 50.0, 1, 2, true, new Date());
 		flowsList.add(transfer1);
 		
 		
@@ -135,5 +139,32 @@ public class Main {
 		return java.sql.Date.valueOf(currentDatePlusTwo);
 	}
 	
-	
+	public static void updateBalances(ArrayList<Flow> flowsList, Map<Integer, Account> accountHashtable) {
+		for (Flow flow : flowsList) {
+			int targetAccountNumber = flow.getTargetAccountNumber();
+			
+			if (accountHashtable.containsKey(targetAccountNumber)) {
+				Account account = accountHashtable.get(targetAccountNumber);
+				account.setBalance(flow);
+			}
+			
+			if (flow instanceof Transfer) {
+			    Transfer transfer = (Transfer) flow;
+			    int issuingAccountNumber = transfer.getAccountNumber();
+			    
+			    if (accountHashtable.containsKey(issuingAccountNumber)) {
+			        Account issuingAccount = accountHashtable.get(issuingAccountNumber);
+			        issuingAccount.setBalance(flow);
+			    }
+			}
+		}
+		
+		Optional<Account> accountWithNegativeBalance = accountHashtable.values().stream()
+				.filter(account -> account.getBalance() < 0)
+				.findFirst();
+		
+		accountWithNegativeBalance.ifPresent(account ->
+		System.out.println("Warning: Account " + account.getAccountNumber() + " has a negative balance: " + account.getBalance()));
+		
+	}
 }
