@@ -8,10 +8,36 @@ public class Transfer extends Flow {
 	
 	private int accountNumber;
 
-	public Transfer(String comment, int identifier, double amount, int targetAccountNumber, boolean effect,
+	public Transfer(String comment, double amount, int targetAccountNumber, boolean effect,
 			Date dateFlow, int accountNumber) {
-		super(comment, identifier, amount, targetAccountNumber, effect, dateFlow);
+		super(comment, amount, targetAccountNumber, effect, dateFlow);
 		this.accountNumber = accountNumber;
+	}
+	
+	
+	
+	public int getAccountNumber() {
+		return accountNumber;
+	}
+
+
+
+	public void setAccountNumber(int accountNumber) {
+		this.accountNumber = accountNumber;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "Transfer: " + 
+				"Comment = '" + getComment() + 
+				"' Identifier = " + getIdentifier() +
+				" Amount = " + getAmount() + 
+				" AccountNumber = " + getAccountNumber() +
+				" TargetAccountNumber = " + getTargetAccountNumber() +
+				" Effect = " + isEffect() +
+				" DateFlow = " + getDateFlow();
 	}
 
 	
