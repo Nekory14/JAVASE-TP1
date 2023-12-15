@@ -15,6 +15,7 @@ public abstract class Account {
 		this.label = label;
 		this.client = client;
 		this.accountNumber = nextAccountNumber++;
+		this.balance = 0.0;
 		
 	}
 
@@ -55,7 +56,7 @@ public abstract class Account {
 
 	@Override
 	public String toString() {
-		return label + balance + accountNumber + client;
+		return label + " Balance: " + balance + " " + accountNumber + client;
 	}
 	
 	
