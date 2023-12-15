@@ -8,15 +8,16 @@ public abstract class Flow {
 	
 	private String comment;
 	private int identifier;
+	private static int nextIdentifier = 1;
 	private double amount;
 	private int targetAccountNumber;
 	private boolean effect;
 	private Date dateFlow;
 	
-	public Flow(String comment, int identifier, double amount, int targetAccountNumber, boolean effect, Date dateFlow) {
+	public Flow(String comment, double amount, int targetAccountNumber, boolean effect, Date dateFlow) {
 	
 		this.comment = comment;
-		this.identifier = identifier;
+		this.identifier = ++nextIdentifier;
 		this.amount = amount;
 		this.targetAccountNumber = targetAccountNumber;
 		this.effect = effect;
