@@ -8,8 +8,8 @@ public class Transfer extends Flow {
 	
 	private int accountNumber;
 
-	public Transfer(String comment, double amount, int targetAccountNumber, boolean effect,
-			Date dateFlow, int accountNumber) {
+	public Transfer(String comment, double amount,int accountNumber, int targetAccountNumber, boolean effect,
+			Date dateFlow) {
 		super(comment, amount, targetAccountNumber, effect, dateFlow);
 		this.accountNumber = accountNumber;
 	}
