@@ -8,7 +8,7 @@ public abstract class Flow {
 	
 	private String comment;
 	private int identifier;
-	private static int nextIdentifier = 1;
+	private static int nextIdentifier = 0;
 	private double amount;
 	private int targetAccountNumber;
 	private boolean effect;
