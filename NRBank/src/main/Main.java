@@ -8,6 +8,7 @@ import java.lang.reflect.Type;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -18,6 +19,13 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
@@ -57,7 +65,9 @@ public class Main {
 		
 		displayFlows(flowsList);
 
-
+		readXML(clientsList, accountsList);
+		
+		displayClients(clientsList);
 	}
 	
 	
@@ -69,7 +79,7 @@ public class Main {
 		
 		ArrayList<Clients> clientSet = new ArrayList<>();
 		for (int i = 0; i < numberOfClients; i++) {
-			clientSet.add(new Clients("Name: " + name, " Firstname: " + firstName, i));
+			clientSet.add(new Clients("Name: " + name, " Firstname: " + firstName));
 		}
 		return clientSet;
 		
@@ -258,11 +268,52 @@ public class Main {
 			}
 			
 		}
-		
-		
-		
-		
-		
+
+	}
+	
+	//2.2 XML file of account
+	
+	public static void readXML(ArrayList<Clients> clientsList, ArrayList<Account> accountsList) {
+
+		try {
+			Path path = Paths.get("..\\accounts.xml");
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document document = builder.parse(path.toFile());
+			
+			NodeList accountNodes = document.getElementsByTagName("account");
+			
+			for(int i = 0; i < accountNodes.getLength(); i++) {
+				
+				Element accountElement = (Element) accountNodes.item(i);
+				String label = accountElement.getElementsByTagName("label").item(0).getTextContent();
+				
+				Element clientElement = (Element) accountElement.getElementsByTagName("client").item(0);
+				String name = clientElement.getElementsByTagName("name").item(0).getTextContent();
+				String firstName = clientElement.getElementsByTagName("firstName").item(0).getTextContent();
+				
+				Clients client = new Clients("Name: " + name, "Firstname: " + firstName);
+				
+				Account account;
+				
+				if("Savings Account".equals(label)) {
+					account = new SavingsAccount(client);
+				} else if ("Current Account".equals(label)) {
+					account = new CurrentAccount(client);
+				} else {
+					continue;
+				}
+				
+				clientsList.add(client);
+				accountsList.add(account);
+				
+			}
+			
+
+			
+		} catch (Exception  e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

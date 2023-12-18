@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<accounts>
+	<account>
+		<label>Savings Account</label>
+		<client>
+			<name>Bruce</name>
+			<firstName>Wayne</firstName>
+		</client>
+	</account>
+	<account>
+		<label>Current Account</label>
+		<client>
+			<name>Clark</name>
+			<firstName>Kent</firstName>
+		</client>
+	</account>
+</accounts>
