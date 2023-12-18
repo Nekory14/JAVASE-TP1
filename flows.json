@@ -1,0 +1,16 @@
+[
+	{
+		"comment": "Debit of 10€", 
+		"amount": 10.0, 
+		"targetAccountNumber": 2,
+		"effect": true,
+		"dateFlow": "2023-12-19"
+	},
+	{
+		"comment": "Credit of 50€", 
+		"amount": 50.0, 
+		"targetAccountNumber": 1,
+		"effect": true,
+		"dateFlow": "2023-12-19"
+	}
+]

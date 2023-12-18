@@ -2,13 +2,25 @@
 
 package main;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
 
 import components.Account;
 import components.Clients;
@@ -40,8 +52,12 @@ public class Main {
 		updateBalances(flowsList, accountHashtable);
 		
 		displayAccountHashtable(accountHashtable);
+		
+		readJson(flowsList);
+		
+		displayFlows(flowsList);
 
-			
+
 	}
 	
 	
@@ -167,4 +183,86 @@ public class Main {
 		System.out.println("Warning: Account " + account.getAccountNumber() + " has a negative balance: " + account.getBalance()));
 		
 	}
+	
+	//2.1 JSON file of flows
+	
+	public static void readJson(ArrayList<Flow> flowsList) {
+		
+		Path path = FileSystems.getDefault().getPath("..\\flows.json");
+		BufferedReader reader = null;
+		try {
+			reader = Files.newBufferedReader(path);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		Type listType = new TypeToken<List<Map<String, Object>>>(){}.getType();
+		List<Map<String, Object>> list = new Gson().fromJson(reader, listType);
+		
+		for(Map<String,Object> properties : list) {
+			
+			if (properties.get("comment").toString().startsWith("Debit")) {
+				
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+				Date dateFlow = null;
+				
+				try {
+					dateFlow = dateFormat.parse(properties.get("dateFlow").toString());
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				
+				Debit flow = new Debit (properties.get("comment").toString(), 
+										Double.parseDouble(properties.get("amount").toString()), 
+										(int) Double.parseDouble(properties.get("targetAccountNumber").toString()), 
+										Boolean.parseBoolean(properties.get("effect").toString()), 
+										dateFlow);
+				flowsList.add(flow);
+
+			} else if (properties.get("comment").toString().startsWith("Credit")){
+				
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+				Date dateFlow = null;
+				
+				try {
+					dateFlow = dateFormat.parse(properties.get("dateFlow").toString());
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				
+				Credit flow = new Credit (properties.get("comment").toString(), 
+										Double.parseDouble(properties.get("amount").toString()), 
+										(int) Double.parseDouble(properties.get("targetAccountNumber").toString()), 
+										Boolean.parseBoolean(properties.get("effect").toString()), 
+										dateFlow);
+				flowsList.add(flow);
+				
+			} else if (properties.get("comment").toString().startsWith("Transfer")) {
+				
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+				Date dateFlow = null;
+				
+				try {
+					dateFlow = dateFormat.parse(properties.get("dateFlow").toString());
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				
+				Transfer flow = new Transfer (properties.get("comment").toString(), 
+										Double.parseDouble(properties.get("amount").toString()),
+										(int) Double.parseDouble(properties.get("accountNumber").toString()) ,
+										(int) Double.parseDouble(properties.get("targetAccountNumber").toString()), 
+										Boolean.parseBoolean(properties.get("effect").toString()), 
+										dateFlow);
+				flowsList.add(flow);
+			}
+			
+		}
+		
+		
+		
+		
+		
+	}
+	
 }
