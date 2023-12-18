@@ -68,7 +68,7 @@ public abstract class Account {
 
 	@Override
 	public String toString() {
-		return label + " Balance: " + balance + " " + accountNumber + client;
+		return label + " Balance: " + balance + " AccountNumber: " + accountNumber + " " + client;
 	}
 	
 	
