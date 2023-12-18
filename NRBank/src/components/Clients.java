@@ -4,15 +4,17 @@ package components;
 
 public class Clients {
 	
+	private static int clientCounter = 0;
+	
 	private String name;
 	private String firstName;
 	private int clientNumber;
 	
-	public Clients(String name, String firstName, int clientNumber) {
+	public Clients(String name, String firstName) {
 	
 		this.name = name;
 		this.firstName = firstName;
-		this.clientNumber = ++clientNumber;
+		this.clientNumber = ++clientCounter;
 		
 	}
 
